@@ -1,4 +1,5 @@
 import json
+import random
 
 pastmoves = list()
 
@@ -7,7 +8,6 @@ def initpredictions(name):
         f = open(name.lower() + '.json')
         predictions = json.loads(f.read())
         f.close()
-        print("made it here")
     except FileNotFoundError:
         predictions = dict()
 
@@ -15,7 +15,7 @@ def initpredictions(name):
     for i in moves:
         if i not in predictions:
             newdict = dict()
-            newdict["freq"] = 1
+            newdict["freq"] = 0
             newdict["next"] = dict()
             predictions[i] = newdict
     return predictions
@@ -64,10 +64,12 @@ def getnextmove(predictedmoves):
         if "rock" in predictedmoves:
             return "paper"
     elif len(predictedmoves) == 0:
-        pass
-        #make random move
+        randnum = random.randint(0,2)
+        if randnum == 0:
+            return "rock"
+        if randnum == 1:
+            return "scissors"
+        if randnum == 2:
+            return "paper"
 
-initpredictions("Nathaniel")
-f = open("nathaniel.json", "w+")
-f.write("{\n}")
-f.close()
+print(initpredictions("Nathaniel"))
