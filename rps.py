@@ -23,8 +23,6 @@ def initpredictions(name=""):
         chains.append(predictions)
     except FileNotFoundError:
         print("Something went wrong!")
-        
-    
 
 def createlayer():
     predictions = dict()
@@ -42,6 +40,8 @@ def makemove(move):
     if len(pastmoves) > CHAIN_DEPTH:
         pastmoves.pop(0)
 
+def update_chains():
+    pass
 
 def getpredictedmoves(currpredictions):
     predictednextmoves = list()
