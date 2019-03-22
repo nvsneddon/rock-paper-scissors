@@ -2,15 +2,19 @@ import json
 import random
 
 pastmoves = list()
+CHAIN_DEPTH = 5
 
 def initpredictions(name):
     try:
         f = open(name.lower() + '.json')
         predictions = json.loads(f.read())
         f.close()
+        return predictions
     except FileNotFoundError:
-        predictions = dict()
+        return createlayer()
 
+def createlayer():
+    predictions = dict()
     moves = ("rock", "paper", "scissors")
     for i in moves:
         if i not in predictions:
@@ -47,8 +51,14 @@ def getnextmove(predictedmoves):
         print("something went wrong")
         exit(1)
     elif len(predictedmoves) == 3:
-        pass
-        #make random choice because it doesn't matter
+        #We have a random choice here!
+        randnum = random.randint(0,2)
+        if randnum == 0:
+            return "rock"
+        if randnum == 1:
+            return "scissors"
+        if randnum == 2:
+            return "paper"
     elif len(predictedmoves) == 2:
         if "scissors" in predictedmoves and "paper" in predictedmoves:
             return "scissors"
@@ -63,13 +73,8 @@ def getnextmove(predictedmoves):
             return "scissors"
         if "rock" in predictedmoves:
             return "paper"
-    elif len(predictedmoves) == 0:
-        randnum = random.randint(0,2)
-        if randnum == 0:
-            return "rock"
-        if randnum == 1:
-            return "scissors"
-        if randnum == 2:
-            return "paper"
+    elif len(predictedmoves) < 1:
+        print("Something went wrong here.")
 
 print(initpredictions("Nathaniel"))
+print(createlayer())
