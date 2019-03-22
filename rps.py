@@ -1,17 +1,30 @@
 import json
 import random
 
+from chains import Chains
+
 pastmoves = list()
+chains = list()
 CHAIN_DEPTH = 5
 
-def initpredictions(name):
+def initpredictions(name=""):
+    if name != "" and name.lower() != "allpeople":
+        try:
+            f = open(name.lower() + '.json')
+            predictions = json.loads(f.read())
+            f.close()
+            chains.append(predictions)
+        except FileNotFoundError:
+            chains.append(createlayer())
     try:
-        f = open(name.lower() + '.json')
-        predictions = json.loads(f.read())
-        f.close()
-        return predictions
+        f2 = open('allpeople.json')
+        predictions = json.loads(f2.read())
+        f2.close()
+        chains.append(predictions)
     except FileNotFoundError:
-        return createlayer()
+        print("Something went wrong!")
+        
+    
 
 def createlayer():
     predictions = dict()
@@ -26,6 +39,8 @@ def createlayer():
 
 def makemove(move):
     pastmoves.append(move)
+    if len(pastmoves) > CHAIN_DEPTH:
+        pastmoves.pop(0)
 
 
 def getpredictedmoves(currpredictions):
@@ -76,5 +91,5 @@ def getnextmove(predictedmoves):
     elif len(predictedmoves) < 1:
         print("Something went wrong here.")
 
-print(initpredictions("Nathaniel"))
-print(createlayer())
+initpredictions("Nathaniel")
+
