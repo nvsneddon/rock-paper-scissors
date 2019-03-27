@@ -36,6 +36,7 @@ class RPS:
             if i not in predictions:
                 newdict = dict()
                 newdict["freq"] = 0
+                print("I am super cool!")
                 newdict["next"] = dict()
                 predictions[i] = newdict
         return predictions
