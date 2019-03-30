@@ -1,5 +1,6 @@
 import json
 import random
+from enum import Enum
 from chain import Chain
 from rpsenum import movesenum
 
@@ -44,15 +45,27 @@ class RPS:
                 return movesenum.paper
         elif len(predictedmoves) < 1:
             print("Something went wrong here.")
+            exit(1)
 
     def getchainlist(self):
         return self.__chainlist
-            
+
+    def makemove(self, move):
+        if isinstance(move, int):
+            move = movesenum(move)
+        elif isinstance(move, str):
+            move = movesenum[move.lower()]
+        elif isinstance(move, Enum):
+            move = move
+        else:
+            print("Somehow you messed up really bad!")
+
 
 def main():
     rpsmachine = RPS()
-    print(rpsmachine.getnextmove().name)
-
+    rpsmachine.makemove(movesenum.scissors)
+    rpsmachine.makemove("rock")
+    rpsmachine.makemove(2)
 
 if __name__ == "__main__":
     main()
