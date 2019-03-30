@@ -1,16 +1,17 @@
 import json
 import random
-
+from enum import Enum
 from chains import Chains
+from rpsenum import movesenum
 
 class RPS:
-
 
     def __init__(self, name=''):
         self.__pastmoves = list()
         self.__chains = list()
         self.CHAIN_DEPTH = 5
         self.__initpredictions(name)
+        
 
     def __initpredictions(self, name):
         if name != "" and name.lower() != "allpeople":
@@ -29,6 +30,9 @@ class RPS:
         except FileNotFoundError:
             print("Something went wrong!")
 
+    def getcurrentpredictions(self):
+        pass
+
     def createlayer(self):
         predictions = dict()
         moves = ("rock", "paper", "scissors")
@@ -36,9 +40,9 @@ class RPS:
             if i not in predictions:
                 newdict = dict()
                 newdict["freq"] = 0
-                print("I am super cool!")
                 newdict["next"] = dict()
                 predictions[i] = newdict
+        print(predictions)
         return predictions
 
     def makemove(self, move):
@@ -66,6 +70,9 @@ class RPS:
             predictednextmoves.append("rock")
 
         return predictednextmoves
+
+    def getpastmoves(self):
+        return self.__pastmoves
         
     def getnextmove(self, predictedmoves):
         if len(predictedmoves) > 3:
@@ -100,6 +107,15 @@ class RPS:
 
 def main():
     rpsmachine = RPS("Nathaniel")
+    rpsmachine.makemove(movesenum.scissors.name)
+    rpsmachine.makemove(movesenum.paper.name)
+    rpsmachine.makemove(movesenum.scissors.name)
+    rpsmachine.makemove(movesenum.rock.name)
+    rpsmachine.makemove(movesenum.rock.name)
+    rpsmachine.makemove(movesenum.scissors.name)
+    print(movesenum.rock.name)
+    print(rpsmachine.getpastmoves())
+
 
 if __name__ == "__main__":
     main()
