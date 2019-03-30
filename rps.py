@@ -26,25 +26,25 @@ class RPS:
             random.seed(datetime.now().microsecond % 10000)
             randnum = random.randint(0,2)
             if randnum == 0:
-                return movesenum.rock.name
+                return movesenum.rock
             if randnum == 1:
-                return movesenum.scissors.name
+                return movesenum.scissors
             if randnum == 2:
-                return movesenum.paper.name
+                return movesenum.paper
         elif len(predictedmoves) == 2:
             if movesenum.scissors in predictedmoves and movesenum.paper in predictedmoves:
-                return movesenum.scissors.name
+                return movesenum.scissors
             elif movesenum.rock in predictedmoves and movesenum.scissors in predictedmoves:
-                return movesenum.rock.name
+                return movesenum.rock
             elif movesenum.rock in predictedmoves and movesenum.paper in predictedmoves:
-                return movesenum.paper.name
+                return movesenum.paper
         elif len(predictedmoves) == 1:
             if movesenum.scissors in predictedmoves:
-                return movesenum.rock.name
+                return movesenum.rock
             if movesenum.paper in predictedmoves:
-                return movesenum.scissors.name
+                return movesenum.scissors
             if movesenum.rock in predictedmoves:
-                return movesenum.paper.name
+                return movesenum.paper
         elif len(predictedmoves) < 1:
             print("Something went wrong here.")
             exit(1)
@@ -63,7 +63,15 @@ class RPS:
     def quit(self):
         for i in self.__chainlist:
             i.savefile()
-        print("Goodbye! Thanks for playing!")
+
+def evalWinner(user_move, computer_move):
+    if isinstance(user_move, str):
+        user_move = movesenum[user_move]
+
+    if user_move.value > computer_move.value or (user_move == movesenum.rock and computer_move == movesenum.scissors):
+        print("Dang it! You beat me this time!")
+    else:
+        print("Yes! I won!!!")
 
 
 def main():
@@ -79,8 +87,21 @@ def main():
         time.sleep(0.4)
         print("Scissors")
         time.sleep(0.4)
-        print('\nI chose', rpsmachine.getnextmove(), '\n\n')
+        computer_move = rpsmachine.getnextmove()
+        print('\nI chose', computer_move.name, '\n\n')
+        print("What did you choose? (Please type 'rock', 'paper', or 'scissors. If you want, you can instead type 1 for rock, 2 for paper, or 3 for scissors.")
+        user_move = input()
+        rpsmachine.makemove(user_move)
+        evalWinner(user_move = user_move, computer_move = computer_move)
+        print('\n')
 
+        if input("Press enter to play again. If you don't want to play again, press any other key + enter to quit.") != "":
+            rpsmachine.quit()
+            break
+        print("Okay, Let's go again!")
+        time.sleep(1)
+    
+    print("Goodbye! Thanks for playing!")
 
 
 
