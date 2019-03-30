@@ -7,7 +7,6 @@ from rpsenum import movesenum
 class RPS:
 
     def __init__(self, name=''):
-        self.__pastmoves = list()
         self.__chains = list()
         self.CHAIN_DEPTH = 5
         self.__initpredictions(name)
@@ -45,13 +44,7 @@ class RPS:
                 predictions[i] = newdict
         return predictions
     
-    def makemove(self, move):
-        if isinstance(move, str):
-            move = movesenum[move.lower()]
-        self.__pastmoves.append(move)
-        if len(self.__pastmoves) > self.CHAIN_DEPTH:
-            self.__pastmoves.pop(0)
-
+    
     def update_chains(self):
         pass
 

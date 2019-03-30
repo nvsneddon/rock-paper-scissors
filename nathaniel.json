@@ -1,3 +1,1 @@
-{
-    
-}
+{"rock": {"freq": 0, "next": {}}, "paper": {"freq": 0, "next": {}}, "scissors": {"freq": 0, "next": {}}}
