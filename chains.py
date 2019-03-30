@@ -2,19 +2,18 @@ import json
 from rpsenum import movesenum
 
 class Chains:
-    def __init__(self, name=""):
+    def __init__(self, name="allpeople"):
         self.__pastmoves = list()
         self.__chain_depth = 5
         self.__chain = dict()
         self.__filename = name.lower()+'.json' 
 
-        if name != "" and name != "allpeople":
-            try:
-                f = open(self.__filename)
-                predictions = json.loads(f.read())
-                f.close()
-            except FileNotFoundError:
-                predictions = self.createlayer()
+        try:
+            f = open(self.__filename)
+            predictions = json.loads(f.read())
+            f.close()
+        except FileNotFoundError:
+            predictions = self.createlayer()
         self.__chain = predictions
 
     def __updateChain(self, chain=dict(), level=0, start=True):
@@ -64,7 +63,7 @@ class Chains:
         return self.__chain
 
 def main():
-    somechain = Chains("Nathaniel")
+    somechain = Chains()
     somechain.makemove("rock")
     somechain.makemove("paper")
     somechain.makemove("scissors")
