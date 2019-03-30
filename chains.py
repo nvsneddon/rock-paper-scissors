@@ -68,6 +68,9 @@ def main():
     somechain.makemove("rock")
     somechain.makemove("paper")
     somechain.makemove("scissors")
+    somechain.makemove("rock")
+    somechain.makemove(movesenum.paper)
+    somechain.makemove(movesenum.scissors)
     somechain.savefile()
 
 if __name__ == "__main__":
