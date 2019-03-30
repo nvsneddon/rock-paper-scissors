@@ -13,7 +13,7 @@ class Chain:
             predictions = json.loads(f.read())
             f.close()
         except FileNotFoundError:
-            predictions = self.createlayer()
+            predictions = self.__createlayer()
         self.__chain = predictions
 
     def __updateChain(self, chain=dict(), level=0, start=True):
@@ -25,7 +25,7 @@ class Chain:
             raise ValueError("The level is out of bounds.")
 
         if not chain:
-            chain = self.createlayer()
+            chain = self.__createlayer()
 
         if level == self.__chain_depth - 1 or level == len(self.__pastmoves)-1:
             chain[self.__pastmoves[level].name]["freq"] += 1
@@ -48,7 +48,7 @@ class Chain:
                 self.__pastmoves.pop(0)
             self.__chain = self.__updateChain()
 
-    def createlayer(self):
+    def __createlayer(self):
         predictions = dict()
         moves = ("rock", "paper", "scissors")
         for i in moves:
@@ -59,28 +59,34 @@ class Chain:
                 predictions[i] = newdict
         return predictions
 
-    def getNextMove(self):
+    def getPredictedMove(self):
         movedict = self.__chain.copy()
         for i in self.__pastmoves:
-            print(i.name, "\n")
             movedict = movedict[i.name]['next']
-            print(movedict, '\n\n')
-        return movedict
-            
+
+        if not movedict:
+            return [movesenum.rock, movesenum.paper, movesenum.scissors] 
+
+        predictednextmoves = list()
+        curmax = 0 
+
+        for i in (movesenum.rock, movesenum.paper, movesenum.scissors):
+            if curmax < movedict[i.name]['freq']:
+                curmax = movedict[i.anem]['freq']
+                predictednextmoves = list()
+                predictednextmoves.append(i)
+            elif curmax == movedict[i.name]['freq']:
+                predictednextmoves.append(i)
+
+        return predictednextmoves
 
 
 def main():
     somechain = Chain()
-    somechain.makemove("rock")
-    somechain.makemove("paper")
-    somechain.makemove("scissors")
-    somechain.makemove("rock")
-    somechain.makemove(movesenum.paper)
-    somechain.makemove(movesenum.scissors)
 
-    print(somechain.getNextMove())
+    print(somechain.getPredictedMove())
 
-    #somechain.savefile()
+    somechain.savefile()
 
 if __name__ == "__main__":
     main()
