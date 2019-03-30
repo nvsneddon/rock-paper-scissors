@@ -66,9 +66,6 @@ class RPS:
 
         return predictednextmoves
 
-    def getpastmoves(self):
-        return self.__pastmoves
-        
     def getnextmove(self, predictedmoves):
         if len(predictedmoves) > 3:
             print("something went wrong")

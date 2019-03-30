@@ -43,6 +43,10 @@ class Chains:
                 predictions[i] = newdict
         return predictions
 
+def main():
+    somechain = Chains("Nathaniel")
+    somechain.savefile()
 
-somechain = Chains("Nathaniel")
-somechain.savefile()
+
+if __name__ == "__main__":
+    main()
