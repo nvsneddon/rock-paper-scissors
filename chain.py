@@ -1,7 +1,7 @@
 import json
 from rpsenum import movesenum
 
-class Chains:
+class Chain:
     def __init__(self, name="allpeople"):
         self.__pastmoves = list()
         self.__chain_depth = 5
@@ -59,18 +59,28 @@ class Chains:
                 predictions[i] = newdict
         return predictions
 
-    def getChain(self):
-        return self.__chain
+    def getNextMove(self):
+        movedict = self.__chain.copy()
+        for i in self.__pastmoves:
+            print(i.name, "\n")
+            movedict = movedict[i.name]['next']
+            print(movedict, '\n\n')
+        return movedict
+            
+
 
 def main():
-    somechain = Chains()
+    somechain = Chain()
     somechain.makemove("rock")
     somechain.makemove("paper")
     somechain.makemove("scissors")
     somechain.makemove("rock")
     somechain.makemove(movesenum.paper)
     somechain.makemove(movesenum.scissors)
-    somechain.savefile()
+
+    print(somechain.getNextMove())
+
+    #somechain.savefile()
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 import json
 import random
 from enum import Enum
-from chains import Chains
+from chain import Chain
 from rpsenum import movesenum
 
 class RPS:
