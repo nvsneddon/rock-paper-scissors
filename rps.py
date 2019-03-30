@@ -47,23 +47,20 @@ class RPS:
             print("Something went wrong here.")
             exit(1)
 
-    def getchainlist(self):
-        return self.__chainlist
-
     def makemove(self, move):
         if isinstance(move, int):
             move = movesenum(move)
         elif isinstance(move, str):
             move = movesenum[move.lower()]
-        elif isinstance(move, Enum):
-            move = move
-        else:
-            print("Somehow you messed up really bad!")
+        elif not isinstance(move, Enum):
+            raise TypeError("The parameter move is not a string, an int, or an enum.\nIt is an instance of " + str(type(move)))
+        
+        for i in self.__chainlist:
+            i.makemove(move)
 
 
 def main():
     rpsmachine = RPS()
-    rpsmachine.makemove(movesenum.scissors)
     rpsmachine.makemove("rock")
     rpsmachine.makemove(2)
 

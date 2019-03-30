@@ -4,9 +4,17 @@ from rpsenum import movesenum
 class Chain:
     def __init__(self, name="allpeople"):
         self.__pastmoves = list()
-        self.__chain_depth = 5
         self.__chain = dict()
         self.__filename = name.lower()+'.json' 
+        self.__chain_depth = 5
+
+        try:
+            f = open("config.json")
+            settings = json.loads(f.read())
+            self.__chain_depth = settings['chain_depth']
+            f.close()
+        except FileNotFoundError:
+            pass
 
         try:
             f = open(self.__filename)
@@ -14,6 +22,7 @@ class Chain:
             f.close()
         except FileNotFoundError:
             predictions = self.__createlayer()
+        print(self.__chain_depth)
         self.__chain = predictions
 
     def __updateChain(self, chain=dict(), level=0, start=True):
