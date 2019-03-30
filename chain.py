@@ -59,7 +59,7 @@ class Chain:
                 predictions[i] = newdict
         return predictions
 
-    def getPredictedMove(self):
+    def getpredictedmove(self):
         movedict = self.__chain.copy()
         for i in self.__pastmoves:
             movedict = movedict[i.name]['next']
@@ -72,7 +72,7 @@ class Chain:
 
         for i in (movesenum.rock, movesenum.paper, movesenum.scissors):
             if curmax < movedict[i.name]['freq']:
-                curmax = movedict[i.anem]['freq']
+                curmax = movedict[i.name]['freq']
                 predictednextmoves = list()
                 predictednextmoves.append(i)
             elif curmax == movedict[i.name]['freq']:
@@ -84,9 +84,9 @@ class Chain:
 def main():
     somechain = Chain()
 
-    print(somechain.getPredictedMove())
+    print(somechain.getpredictedmove())
 
-    somechain.savefile()
+    #somechain.savefile()
 
 if __name__ == "__main__":
     main()
