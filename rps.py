@@ -98,5 +98,9 @@ class RPS:
             print("Something went wrong here.")
             
 
-rpsmachine = RPS("Nathaniel")
+def main():
+    rpsmachine = RPS("Nathaniel")
+
+if __name__ == "__main__":
+    main()
 
