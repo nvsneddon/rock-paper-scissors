@@ -28,6 +28,7 @@ class Chains:
     def makemove(self, move):
             if isinstance(move, str):
                 move = movesenum[move.lower()]
+            
             self.__pastmoves.append(move)
             if len(self.__pastmoves) > self.__chain_depth:
                 self.__pastmoves.pop(0)
@@ -46,7 +47,6 @@ class Chains:
 def main():
     somechain = Chains("Nathaniel")
     somechain.savefile()
-
 
 if __name__ == "__main__":
     main()
