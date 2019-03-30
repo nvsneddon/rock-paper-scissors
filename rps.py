@@ -25,6 +25,7 @@ class RPS:
         try:
             f2 = open('allpeople.json')
             predictions = json.loads(f2.read())
+            print(predictions)
             f2.close()
             self.__chains.append(predictions)
         except FileNotFoundError:
@@ -35,17 +36,18 @@ class RPS:
 
     def createlayer(self):
         predictions = dict()
-        moves = ("rock", "paper", "scissors")
+        moves = (movesenum.rock, movesenum.paper, movesenum.scissors)
         for i in moves:
             if i not in predictions:
                 newdict = dict()
                 newdict["freq"] = 0
                 newdict["next"] = dict()
                 predictions[i] = newdict
-        print(predictions)
         return predictions
-
+    
     def makemove(self, move):
+        if isinstance(move, str):
+            move = movesenum[move.lower()]
         self.__pastmoves.append(move)
         if len(self.__pastmoves) > self.CHAIN_DEPTH:
             self.__pastmoves.pop(0)
@@ -55,19 +57,19 @@ class RPS:
 
     def getpredictedmoves(self, currpredictions):
         predictednextmoves = list()
-        curmax = currpredictions["rock"]["freq"]
+        curmax = currpredictions[movesenum.rock]["freq"]
     #Fix bug that will append object before checking other max items
-        if currpredictions["scissors"]["freq"] >= curmax:
-            curmax = currpredictions["scissors"]["freq"]
-            predictednextmoves.append("scissors")
+        if currpredictions[movesenum.scissors]["freq"] >= curmax:
+            curmax = currpredictions[movesenum.scissors]["freq"]
+            predictednextmoves.append(movesenum.scissors)
 
-        if currpredictions["paper"]["freq"] >= curmax:
-            curmax = currpredictions["paper"]["freq"]
-            predictednextmoves.append("paper")
+        if currpredictions[movesenum.paper]["freq"] >= curmax:
+            curmax = currpredictions[movesenum.paper]["freq"]
+            predictednextmoves.append(movesenum.paper)
         
-        if currpredictions["rock"]["freq"] >= curmax:
-            curmax = currpredictions["rock"]["freq"]
-            predictednextmoves.append("rock")
+        if currpredictions[movesenum.rock]["freq"] >= curmax:
+            curmax = currpredictions[movesenum.rock]["freq"]
+            predictednextmoves.append(movesenum.rock)
 
         return predictednextmoves
 
@@ -82,39 +84,34 @@ class RPS:
             #We have a random choice here!
             randnum = random.randint(0,2)
             if randnum == 0:
-                return "rock"
+                return movesenum.rock
             if randnum == 1:
-                return "scissors"
+                return movesenum.scissors
             if randnum == 2:
-                return "paper"
+                return movesenum.paper
         elif len(predictedmoves) == 2:
-            if "scissors" in predictedmoves and "paper" in predictedmoves:
-                return "scissors"
-            elif "rock" in predictedmoves and "scissors" in predictedmoves:
-                return "rock"
-            elif "rock" in predictedmoves and "paper" in predictedmoves:
-                return "paper"
+            if movesenum.scissors in predictedmoves and movesenum.paper in predictedmoves:
+                return movesenum.scissors
+            elif movesenum.rock in predictedmoves and movesenum.scissors in predictedmoves:
+                return movesenum.rock
+            elif movesenum.rock in predictedmoves and movesenum.paper in predictedmoves:
+                return movesenum.paper
         elif len(predictedmoves) == 1:
-            if "scissors" in predictedmoves:
-                return "rock"
-            if "paper" in predictedmoves:
-                return "scissors"
-            if "rock" in predictedmoves:
-                return "paper"
+            if movesenum.scissors in predictedmoves:
+                return movesenum.rock
+            if movesenum.paper in predictedmoves:
+                return movesenum.scissors
+            if movesenum.rock in predictedmoves:
+                return movesenum.paper
         elif len(predictedmoves) < 1:
             print("Something went wrong here.")
+
+    def getchain(self):
+        return self.__chains
             
 
 def main():
     rpsmachine = RPS("Nathaniel")
-    rpsmachine.makemove(movesenum.scissors.name)
-    rpsmachine.makemove(movesenum.paper.name)
-    rpsmachine.makemove(movesenum.scissors.name)
-    rpsmachine.makemove(movesenum.rock.name)
-    rpsmachine.makemove(movesenum.rock.name)
-    rpsmachine.makemove(movesenum.scissors.name)
-    print(movesenum.rock.name)
-    print(rpsmachine.getpastmoves())
 
 
 if __name__ == "__main__":
