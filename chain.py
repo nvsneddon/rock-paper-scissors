@@ -22,7 +22,6 @@ class Chain:
             f.close()
         except FileNotFoundError:
             predictions = self.__createlayer()
-        print(self.__chain_depth)
         self.__chain = predictions
 
     def __updateChain(self, chain=dict(), level=0, start=True):
