@@ -91,5 +91,10 @@ def getnextmove(predictedmoves):
     elif len(predictedmoves) < 1:
         print("Something went wrong here.")
 
-initpredictions("Nathaniel")
+
+def main():
+    initpredictions("Nathaniel")
+
+if __name__ == "__main__":
+    main()
 
