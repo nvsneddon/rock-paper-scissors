@@ -22,14 +22,12 @@ class RPS:
 
     def getnextmove(self):
 
-        # if len(self.__chainlist) == 1:
-        #     predictedmoves = self.__chainlist[0].getpredictedmove()
-        # elif self.__chainlist[0]['total'] < (self.__chainlist[1]['total'] / 3) or self.__chainlist[0]['total'] >= 10:
-        #     predictedmoves = self.__chainlist[1].getpredictedmove()
-        # else:
-        #     predictedmoves = self.__chainlist[0].getpredictedmove()
 
-        predictedmoves, total = self.__chainlist[0].getpredictedmove()
+        predictedmoves, reliability = self.__chainlist[0].getpredictedmove()
+        if len(self.__chainlist) == 2:
+            predictedmoves2, reliability2 = self.__chainlist[1].getpredictedmove()
+            if reliability2/3 > reliability:
+                predictedmoves = predictedmoves2
 
         if len(predictedmoves) > 3:
             print("something went terribly wrong")

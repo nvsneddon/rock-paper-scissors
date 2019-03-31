@@ -75,8 +75,11 @@ class Chain:
         for i in self.__pastmoves:
             movedict = movedict[i.name]['next']
 
+        reliability = movedict['total']
+
         if not movedict:
-            return [movesenum.rock, movesenum.paper, movesenum.scissors] 
+            reliability /= 3
+            return [movesenum.rock, movesenum.paper, movesenum.scissors], reliability
 
         predictednextmoves = list()
         curmax = 0 
@@ -89,7 +92,10 @@ class Chain:
             elif curmax == movedict[i.name]['freq']:
                 predictednextmoves.append(i)
 
-        return predictednextmoves, movedict['total']
+        if len(predictednextmoves) == 2:
+            reliability *= 0.68
+
+        return predictednextmoves, reliability
 
     def test(self):
         self.__createlayer()
