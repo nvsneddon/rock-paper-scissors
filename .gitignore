@@ -1,8 +1,5 @@
 .vscode
 __pycache__
 *.pyc
-*.json
 uml.txt
-
-!allpeople.json
-!config.json
+/userdata

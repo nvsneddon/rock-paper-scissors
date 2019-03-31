@@ -5,7 +5,7 @@ class Chain:
     def __init__(self, name="allpeople"):
         self.__pastmoves = list()
         self.__chain = dict()
-        self.__filename = name.lower()+'.json' 
+        self.__filename = 'userdata/'+name.lower()+'.json' 
         self.__chain_depth = 5
 
         try:
