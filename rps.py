@@ -67,8 +67,12 @@ class RPS:
 def evalWinner(user_move, computer_move):
     if isinstance(user_move, str):
         user_move = movesenum[user_move]
-
-    if user_move.value > computer_move.value or (user_move == movesenum.rock and computer_move == movesenum.scissors):
+    
+    if user_move.value == computer_move.value:
+        print("We're pretty even there!")
+    elif user_move == movesenum.scissors and computer_move == movesenum.rock:
+        print("Yes! I won!!!")
+    elif user_move.value > computer_move.value or (user_move == movesenum.rock and computer_move == movesenum.scissors):
         print("Dang it! You beat me this time!")
     else:
         print("Yes! I won!!!")
@@ -79,6 +83,19 @@ def main():
     print("If you would like, you could tell me who you are so I can learn how to beat you!")
     print("If you want to have a personalized match, please type in your name. Otherwise, please press enter.\n")
     rpsmachine = RPS(input("Name: "))
+    print("Okay, Let's start!")
+    time.sleep(0.5)
+    print("3")
+    time.sleep(1)
+    print("2")
+    time.sleep(1)
+    print("1")
+    time.sleep(1)
+
+    def isValid(user_move):
+        if user_move.lower() in ('rock', 'paper', 'scissors'): 
+            return True
+        return False
 
     while True:
         print("Rock")
@@ -89,8 +106,11 @@ def main():
         time.sleep(0.4)
         computer_move = rpsmachine.getnextmove()
         print('\nI chose', computer_move.name, '\n\n')
-        print("What did you choose? (Please type 'rock', 'paper', or 'scissors. If you want, you can instead type 1 for rock, 2 for paper, or 3 for scissors.")
+        print("What did you choose? (Please type 'rock', 'paper', or 'scissors.)")
         user_move = input()
+        while not isValid(user_move):
+            print("I didn't get that. Could you please type that again?")
+            user_move = input()
         rpsmachine.makemove(user_move)
         evalWinner(user_move = user_move, computer_move = computer_move)
         print('\n')
@@ -107,4 +127,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
+   
