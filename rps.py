@@ -14,6 +14,9 @@ class RPS:
         if name != 'allpeople' or name != "":
             self.__chainlist.append(Chain(name))
         self.__chainlist.append(Chain())
+        self.__computer_wins = 0
+        self.__user_wins = 0
+        self.__draws = 0
 
     def getnextmove(self):
         predictedmoves = self.__chainlist[0].getpredictedmove()
@@ -63,19 +66,26 @@ class RPS:
     def quit(self):
         for i in self.__chainlist:
             i.savefile()
+        print("You won", self.__user_wins, "games.")
+        print("And I won", self.__computer_wins, "games.")
+        print("We tied", self.__draws, "games.")
 
-def evalWinner(user_move, computer_move):
-    if isinstance(user_move, str):
-        user_move = movesenum[user_move]
-    
-    if user_move.value == computer_move.value:
-        print("We're pretty even there!")
-    elif user_move == movesenum.scissors and computer_move == movesenum.rock:
-        print("Yes! I won!!!")
-    elif user_move.value > computer_move.value or (user_move == movesenum.rock and computer_move == movesenum.scissors):
-        print("Dang it! You beat me this time!")
-    else:
-        print("Yes! I won!!!")
+    def evalWinner(self, user_move, computer_move):
+        if isinstance(user_move, str):
+            user_move = movesenum[user_move]
+        
+        if user_move.value == computer_move.value:
+            print("We're pretty even there!")
+            self.__draws += 1
+        elif user_move == movesenum.scissors and computer_move == movesenum.rock:
+            print("Yes! I won!!!")
+            self.__computer_wins += 1
+        elif user_move.value > computer_move.value or (user_move == movesenum.rock and computer_move == movesenum.scissors):
+            print("Dang it! You beat me this time!")
+            self.__user_wins += 1
+        else:
+            print("Yes! I won!!!")
+            self.__computer_wins += 1
 
 
 def main():
@@ -111,8 +121,8 @@ def main():
         while not isValid(user_move):
             print("I didn't get that. Could you please type that again?")
             user_move = input()
-        rpsmachine.makemove(user_move)
-        evalWinner(user_move = user_move, computer_move = computer_move)
+        rpsmachine.makemove(user_move.lower())
+        rpsmachine.evalWinner(user_move = user_move, computer_move = computer_move)
         print('\n')
 
         if input("Press enter to play again. If you don't want to play again, press any other key + enter to quit.") != "":
