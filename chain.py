@@ -37,6 +37,7 @@ class Chain:
 
         if level == self.__chain_depth - 1 or level == len(self.__pastmoves)-1:
             chain[self.__pastmoves[level].name]["freq"] += 1
+            chain['total'] += 1
             return chain
 
         chain[self.__pastmoves[level].name]["next"] = self.__updateChain(chain[self.__pastmoves[level].name]['next'], level=level+1, start=False)
@@ -65,6 +66,8 @@ class Chain:
                 newdict["freq"] = 0
                 newdict["next"] = dict()
                 predictions[i] = newdict
+        predictions['total'] = 0
+        print(predictions)
         return predictions
 
     def getpredictedmove(self):
@@ -86,13 +89,16 @@ class Chain:
             elif curmax == movedict[i.name]['freq']:
                 predictednextmoves.append(i)
 
-        return predictednextmoves
+        return predictednextmoves, movedict['total']
+
+    def test(self):
+        self.__createlayer()
 
 
 def main():
     somechain = Chain()
-
-    print(somechain.getpredictedmove())
+    somechain.test()
+    
 
     #somechain.savefile()
 

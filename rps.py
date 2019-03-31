@@ -11,7 +11,7 @@ class RPS:
 
     def __init__(self, name='allpeople'):
         self.__chainlist = list()
-        if name != 'allpeople' or name != "":
+        if name != 'allpeople' and name != "":
             self.__chainlist.append(Chain(name))
         self.__chainlist.append(Chain())
         self.__computer_wins = 0
@@ -21,7 +21,15 @@ class RPS:
         self.__user_streak = 0
 
     def getnextmove(self):
-        predictedmoves = self.__chainlist[0].getpredictedmove()
+
+        # if len(self.__chainlist) == 1:
+        #     predictedmoves = self.__chainlist[0].getpredictedmove()
+        # elif self.__chainlist[0]['total'] < (self.__chainlist[1]['total'] / 3) or self.__chainlist[0]['total'] >= 10:
+        #     predictedmoves = self.__chainlist[1].getpredictedmove()
+        # else:
+        #     predictedmoves = self.__chainlist[0].getpredictedmove()
+
+        predictedmoves, total = self.__chainlist[0].getpredictedmove()
 
         if len(predictedmoves) > 3:
             print("something went terribly wrong")
