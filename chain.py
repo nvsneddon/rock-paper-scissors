@@ -67,7 +67,6 @@ class Chain:
                 newdict["next"] = dict()
                 predictions[i] = newdict
         predictions['total'] = 0
-        print(predictions)
         return predictions
 
     def getpredictedmove(self):
@@ -75,12 +74,10 @@ class Chain:
         for i in self.__pastmoves:
             movedict = movedict[i.name]['next']
 
-        reliability = movedict['total']
-
         if not movedict:
-            reliability /= 3
-            return [movesenum.rock, movesenum.paper, movesenum.scissors], reliability
+            return [movesenum.rock, movesenum.paper, movesenum.scissors], 0
 
+        reliability = movedict['total']
         predictednextmoves = list()
         curmax = 0 
 
@@ -93,7 +90,7 @@ class Chain:
                 predictednextmoves.append(i)
 
         if len(predictednextmoves) == 2:
-            reliability *= 0.68
+            reliability *= 0.67
 
         return predictednextmoves, reliability
 

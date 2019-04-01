@@ -1,5 +1,6 @@
 import json
 import random
+import math
 import time
 
 from enum import Enum
@@ -26,8 +27,10 @@ class RPS:
         predictedmoves, reliability = self.__chainlist[0].getpredictedmove()
         if len(self.__chainlist) == 2:
             predictedmoves2, reliability2 = self.__chainlist[1].getpredictedmove()
-            if reliability2/3 > reliability:
-                predictedmoves = predictedmoves2
+            purityfactor1 = 2**reliability * 0.125
+            purityfactor2 = math.sqrt(reliability2) * 2
+            if purityfactor1 < purityfactor2:
+                predictedmoves = predictedmoves2 
 
         if len(predictedmoves) > 3:
             print("something went terribly wrong")
