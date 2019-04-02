@@ -34,8 +34,8 @@ class RPS:
         predictedmoves, reliability = self.__chainlist[0].getpredictedmove()
         if len(self.__chainlist) == 2:
             predictedmoves2, reliability2 = self.__chainlist[1].getpredictedmove()
-            purityfactor1 = 2**reliability * 0.125
-            purityfactor2 = math.sqrt(reliability2) * 2
+            purityfactor1 = 0.2*reliability**2
+            purityfactor2 = reliability2
             if purityfactor1 < purityfactor2:
                 predictedmoves = predictedmoves2 
 
@@ -87,8 +87,10 @@ class RPS:
             i.savefile()
         print("You won", self.__user_wins, "games.")
         print("And I won", self.__computer_wins, "games.")
-        print("We tied", self.__draws, "games.")
-        print("\nThat means that in total I only lost {} out of {} times, making my rate of losing {:4.2}".format(self.__user_wins, totalgames, self.__user_wins/totalgames))
+        print("We tied", self.__draws, "games\n")
+        print("\nThat means that in total I lost {} out of {} times, making my losing rate {:4.2}".format(self.__user_wins, totalgames, self.__user_wins/totalgames))
+        print("And you lost {} out of {} times, making your losing rate {:4.2}".format(self.__computer_wins, totalgames, self.__computer_wins/totalgames))
+        print("We ended up having a draw {} times, making that be a draw rate of {:4.2}".format(self.__draws, self.__draws/totalgames))
 
     def evalWinner(self, user_move, computer_move):
         if isinstance(user_move, str):
