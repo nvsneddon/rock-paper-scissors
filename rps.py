@@ -21,6 +21,13 @@ class RPS:
         self.__computer_streak = 0
         self.__user_streak = 0
 
+    def resetstats(self):
+        self.__computer_wins = 0
+        self.__user_wins = 0
+        self.__draws = 0
+        self.__computer_streak = 0
+        self.__user_streak = 0
+
     def getnextmove(self):
 
 
@@ -116,11 +123,28 @@ class RPS:
 
 
 def main():
+    filename = 'config.json'
+    depth = 5 
+    try:
+        f = open(filename)
+        depth = json.loads(f.read())['chain_depth']
+        f.close()
+    except FileNotFoundError:
+        print("No file named {} can be found".format(filename))
+
+    counter = depth
     print("Hello! Welcome to the Rock Paper Scissors game.")
     print("If you would like, you could tell me who you are so I can learn how to beat you!")
     print("If you want to have a personalized match, please type in your name. Otherwise, please press enter.\n")
-    rpsmachine = RPS(input("Name: "))
-    print("Okay, Let's start!")
+    name = input("Name: ")
+    rpsmachine = RPS(name)
+    if name != '':
+        print("Hi there {}, Let's start!".format(name))
+        print("It takes me about {} rounds to learn your pattern, but once I'm there. I'm unstoppable! :).".format(counter))
+    else:
+        print("Well I'll assume you're just like everybody else")
+        print("It takes me about {} rounds to learn your pattern and to apply that to how everyone else plays the game, but once I'm there. I'm unstoppable! :).".format(counter, ))
+    input("Press enter when you are ready.")
     time.sleep(0.5)
     print("3")
     time.sleep(1)
@@ -152,6 +176,12 @@ def main():
         rpsmachine.makemove(user_move.lower())
         rpsmachine.evalWinner(user_move = user_move, computer_move = computer_move)
         print('\n')
+        counter -= 1
+        if counter == 0:
+            print("I think I know how to beat you now >:) Let's start really keeping track of everything.")
+            rpsmachine.resetstats()
+        elif counter == depth //2:
+            print("Good news, I'm almost done learning how you play. I only have {} more rounds.\n".format(counter))
 
         if input("Press enter to play again. If you don't want to play again, press any other key + enter to quit.") != "":
             rpsmachine.quit()
