@@ -15,12 +15,24 @@ class RPS:
         if name != 'allpeople' and name != "":
             self.__chainlist.append(Chain(name))
         self.__chainlist.append(Chain())
+        self.__statsfilename = "stats/" + name + "_stats.json"
+        try:
+            f = open(self.__statsfilename)
+            self.__user_complete_stats = json.loads(f.read())
+            f.close()
+        except FileNotFoundError:
+            self.__user_complete_stats = dict()
+            self.__user_complete_stats["timesplayed"] = 0
+            self.__user_complete_stats["avg_winning_rate"] = []
+            self.__user_complete_stats["avg_winning_labels"] = []
+
         self.__computer_wins = 0
         self.__user_wins = 0
         self.__draws = 0
         self.__computer_streak = 0
         self.__user_streak = 0
         self.__computer_stat_list = []
+        self.__saving_progress = False
 
     def resetstats(self):
         self.__computer_wins = 0
@@ -29,6 +41,40 @@ class RPS:
         self.__computer_streak = 0
         self.__user_streak = 0
         self.__computer_stat_list = []
+        self.__saving_progress = True 
+
+    def update_user_stats(self, won):
+        try:
+            f = open(self.__statsfilename)
+            user_complete_stats = json.loads(f.read())
+            f.close()
+        except FileNotFoundError:
+            user_complete_stats = dict()
+            user_complete_stats["times_played"] = 0
+            user_complete_stats["times_won"] = 0
+            user_complete_stats["avg_winning_rate"] = []
+            user_complete_stats["avg_winning_labels"] = []
+
+        if won:
+            user_complete_stats["times_won"] += 1
+        user_complete_stats["times_played"] += 1
+        
+        newaverage = user_complete_stats["times_won"] / user_complete_stats["times_played"] 
+        user_complete_stats["avg_winning_rate"].append(newaverage)
+        user_complete_stats["avg_winning_labels"].append(user_complete_stats["times_played"])
+
+        f = open(self.__statsfilename, "w")
+        f.write(json.dumps(user_complete_stats))
+        f.close()
+
+        #times_played = self.__user_complete_stats["timesplayed"]
+        #times_played += 1
+        #if(times_played % 10 == 0):
+        #    totalgames = self.__computer_wins + self.__user_wins + self.__draws
+        #    self.__user_complete_stats["avg_winning_rate"].append(self.__user_wins / totalgames)
+        #    self.__user_complete_stats["avg_winning_labels"].append(times_played)
+        #self.__user_complete_stats["timesplayed"]
+
 
     def getnextmove(self):
 
@@ -134,6 +180,7 @@ class RPS:
         f2.close()
 
 
+
     def evalWinner(self, user_move, computer_move):
         if isinstance(user_move, str):
             user_move = movesenum[user_move]
@@ -144,12 +191,16 @@ class RPS:
             self.__computer_streak = 0
             self.__user_streak = 0
             self.__computer_stat_list.append(0)
+            if self.__saving_progress:
+                self.update_user_stats(False)
         elif user_move == movesenum.scissors and computer_move == movesenum.rock:
             print("Yes! I won!!!")
             self.__computer_wins += 1
             self.__computer_streak += 1
             self.__user_streak = 0
             self.__computer_stat_list.append(0)
+            if self.__saving_progress:
+                self.update_user_stats(False)
             if self.__computer_streak > 2:
                 print("I beat you {} times already".format(self.__computer_streak))
         elif user_move.value > computer_move.value or (user_move == movesenum.rock and computer_move == movesenum.scissors):
@@ -158,6 +209,8 @@ class RPS:
             self.__user_streak += 1
             self.__computer_streak = 0
             self.__computer_stat_list.append(1)
+            if self.__saving_progress:
+                self.update_user_stats(True)
             if self.__user_streak > 2:
                 print("You beat me {} times already".format(self.__user_streak))
         else:
@@ -166,6 +219,8 @@ class RPS:
             self.__computer_streak += 1
             self.__user_streak = 0
             self.__computer_stat_list.append(0)
+            if self.__saving_progress:
+                self.update_user_stats(False)
             if self.__computer_streak > 2:
                 print("I beat you {} times already".format(self.__computer_streak))
 
