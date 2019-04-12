@@ -20,6 +20,7 @@ class RPS:
         self.__draws = 0
         self.__computer_streak = 0
         self.__user_streak = 0
+        self.__computer_stat_list = []
 
     def resetstats(self):
         self.__computer_wins = 0
@@ -27,6 +28,7 @@ class RPS:
         self.__draws = 0
         self.__computer_streak = 0
         self.__user_streak = 0
+        self.__computer_stat_list = []
 
     def getnextmove(self):
 
@@ -92,6 +94,46 @@ class RPS:
         print("And you lost {} out of {} times, making your losing rate {:4.2}".format(self.__computer_wins, totalgames, self.__computer_wins/totalgames))
         print("We ended up having a draw {} times, making that be a draw rate of {:4.2}".format(self.__draws, self.__draws/totalgames))
 
+        myfile = "stats/loosinginfo.json"
+        try:
+            f = open(myfile)
+            stats = json.loads(f.read())
+            f.close()
+        except FileNotFoundError:
+            stats = list()
+            #statsdict["computer_wins"] = 0
+            #statsdict["user_wins"] = 0
+            #statsdict["draws"] = 0
+            #statsdict["totalgames"] = 0
+            #stats.append(statsdict)
+
+        myfile2 = "stats/all_computer_losses.json"
+        try:
+            f2 = open(myfile2)
+            all_losses = json.loads(f2.read())
+            f2.close()
+        except FileNotFoundError:
+            all_losses = list()
+        
+        statsdict = dict()
+        statsdict["computer_wins"] = self.__computer_wins
+        statsdict["user_wins"] = self.__user_wins
+        statsdict["draws"] = self.__draws 
+        statsdict["totalgames"] = totalgames 
+        statsdict["average_loosing_rate"] = self.__user_wins / totalgames
+        statsdict["computer_losses"] = self.__computer_stat_list
+        stats.append(statsdict)
+        all_losses.extend(self.__computer_stat_list)
+
+        f = open(myfile, 'w')
+        f.write(json.dumps(stats))
+        f.close()
+
+        f2 = open(myfile2, "w")
+        f2.write(json.dumps(all_losses))
+        f2.close()
+
+
     def evalWinner(self, user_move, computer_move):
         if isinstance(user_move, str):
             user_move = movesenum[user_move]
@@ -101,11 +143,13 @@ class RPS:
             self.__draws += 1
             self.__computer_streak = 0
             self.__user_streak = 0
+            self.__computer_stat_list.append(0)
         elif user_move == movesenum.scissors and computer_move == movesenum.rock:
             print("Yes! I won!!!")
             self.__computer_wins += 1
             self.__computer_streak += 1
             self.__user_streak = 0
+            self.__computer_stat_list.append(0)
             if self.__computer_streak > 2:
                 print("I beat you {} times already".format(self.__computer_streak))
         elif user_move.value > computer_move.value or (user_move == movesenum.rock and computer_move == movesenum.scissors):
@@ -113,6 +157,7 @@ class RPS:
             self.__user_wins += 1
             self.__user_streak += 1
             self.__computer_streak = 0
+            self.__computer_stat_list.append(1)
             if self.__user_streak > 2:
                 print("You beat me {} times already".format(self.__user_streak))
         else:
@@ -120,6 +165,7 @@ class RPS:
             self.__computer_wins += 1
             self.__computer_streak += 1
             self.__user_streak = 0
+            self.__computer_stat_list.append(0)
             if self.__computer_streak > 2:
                 print("I beat you {} times already".format(self.__computer_streak))
 
